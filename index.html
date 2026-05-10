@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhoneLayer | Ultimate</title>
+    <title>PhoneLayer | Mobile Database</title>
     <style>
         :root {
             --bg: #050810;
@@ -15,10 +15,9 @@
         body {
             background-color: var(--bg);
             color: white;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center;
-            overflow-x: hidden;
         }
 
         header { padding: 40px 0; text-align: center; width: 100%; }
@@ -26,13 +25,13 @@
             font-size: 3rem; margin: 0; 
             background: linear-gradient(to right, #60a5fa, #a855f7); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            font-weight: 900; letter-spacing: -1px;
+            font-weight: 900;
         }
 
-        /* ЛЕНТА SUBWAY SURFERS */
+        /* ТВОЯ ЛЕНТА */
         .main-container {
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
             display: flex;
             flex-direction: column;
             gap: 25px;
@@ -48,31 +47,28 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(10px);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
         }
 
         .card:hover {
-            transform: translateY(-10px) scale(1.02);
+            transform: translateY(-10px);
             border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(56, 189, 248, 0.1);
         }
 
-        /* АНИМАЦИЯ КАРТИНКИ */
         .img-box {
             width: 180px; height: 180px;
             display: flex; align-items: center; justify-content: center;
             margin-bottom: 15px;
         }
+
         .img-box img {
             max-width: 100%; max-height: 100%;
             object-fit: contain;
-            transition: 0.6s ease;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            transition: 0.5s ease;
         }
-        .card:hover .img-box img {
-            transform: scale(1.2) rotate(-5deg);
-        }
+
+        .card:hover img { transform: scale(1.15) rotate(-3deg); }
 
         h3 { margin: 10px 0; font-size: 1.6rem; }
         .price { color: #22c55e; font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; }
@@ -81,39 +77,47 @@
         .btns-group { display: flex; gap: 10px; width: 100%; }
         .btn {
             flex: 1; padding: 14px; border-radius: 18px; border: none;
-            font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.3s;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
         }
         .btn-info { background: var(--accent); color: #000; }
-        .btn-info:hover { background: #7dd3fc; }
         .btn-comp { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-comp.active { background: #facc15; color: #000; border-color: #facc15; }
+        .btn-comp.active { background: #facc15; color: #000; }
 
-        /* ОКНО ИНФОРМАЦИИ */
+        /* МОДАЛКИ (Изначально скрыты!) */
         .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); backdrop-filter: blur(20px);
+            display: none; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(15px);
             z-index: 1000; justify-content: center; align-items: center; padding: 20px;
         }
+
         .modal-content {
-            background: #0f172a; padding: 35px; border-radius: 40px;
-            width: 100%; max-width: 400px; position: relative;
+            background: #0f172a; padding: 30px; border-radius: 35px;
+            width: 100%; max-width: 360px; position: relative;
             border: 1px solid rgba(255,255,255,0.1);
-            animation: slideUp 0.4s ease;
         }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        .close { position: absolute; top: 20px; right: 25px; font-size: 2rem; cursor: pointer; color: var(--text-sec); }
-        .spec-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .label { color: var(--text-sec); font-size: 0.85rem; text-transform: uppercase; }
-        .val { font-weight: bold; text-align: right; }
+
+        .close { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; }
+
+        .spec-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .label { color: var(--text-sec); font-size: 0.8rem; }
 
         /* НИЖНИЙ БАР СРАВНЕНИЯ */
         .compare-bar {
-            position: fixed; bottom: 30px; background: #0ea5e9;
-            width: 90%; max-width: 380px; padding: 15px 25px;
-            border-radius: 25px; display: none; justify-content: space-between;
-            align-items: center; z-index: 2000; box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #0ea5e9; width: 85%; max-width: 350px;
+            padding: 15px 20px; border-radius: 20px;
+            display: none; justify-content: space-between; align-items: center;
+            z-index: 900; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+
+        /* ТАБЛИЦА СРАВНЕНИЯ */
+        #compareScreen {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 2000; overflow: auto; padding: 40px 10px;
+        }
+        table { border-collapse: collapse; width: 100%; min-width: 500px; margin-top: 30px; }
+        th, td { padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -123,45 +127,33 @@
 </header>
 
 <div class="main-container">
-    <div class="card" id="phone-apple" 
-        data-name="iPhone 16 Pro Max" data-price="$1199" 
-        data-cpu="A18 Pro (3nm)" data-os="iOS 18" 
-        data-ram="8GB" data-rom="256GB - 1TB" 
-        data-cam="48+48+12 Мп" data-batt="4685 мАч">
+    <div class="card" id="p1" data-name="iPhone 16 Pro Max" data-price="$1199" data-cpu="A18 Pro" data-os="iOS 18" data-ram="8GB" data-batt="4685 mAh">
         <div class="img-box"><img src="images/iphone.png"></div>
         <h3>iPhone 16 Pro Max</h3>
         <div class="price">$1199</div>
         <div class="btns-group">
-            <button class="btn btn-info" onclick="openInfo('phone-apple')">ИНФО</button>
-            <button class="btn btn-comp" onclick="addToCompare(this, 'phone-apple')">+ СРАВНИТЬ</button>
+            <button class="btn btn-info" onclick="openInfo('p1')">ИНФО</button>
+            <button class="btn btn-comp" onclick="addToCompare(this, 'p1')">+ СРАВНИТЬ</button>
         </div>
     </div>
 
-    <div class="card" id="phone-honor" 
-        data-name="Honor Magic V3" data-price="$1350" 
-        data-cpu="Snapdragon 8 Gen 3" data-os="MagicOS 8" 
-        data-ram="12/16GB" data-rom="512GB - 1TB" 
-        data-cam="50+50+40 Мп" data-batt="5150 мАч">
+    <div class="card" id="p2" data-name="Honor Magic V3" data-price="$1350" data-cpu="SD 8 Gen 3" data-os="MagicOS 8" data-ram="12/16GB" data-batt="5150 mAh">
         <div class="img-box"><img src="images/honor.png"></div>
         <h3>Honor Magic V3</h3>
         <div class="price">$1350</div>
         <div class="btns-group">
-            <button class="btn btn-info" onclick="openInfo('phone-honor')">ИНФО</button>
-            <button class="btn btn-comp" onclick="addToCompare(this, 'phone-honor')">+ СРАВНИТЬ</button>
+            <button class="btn btn-info" onclick="openInfo('p2')">ИНФО</button>
+            <button class="btn btn-comp" onclick="addToCompare(this, 'p2')">+ СРАВНИТЬ</button>
         </div>
     </div>
 
-    <div class="card" id="phone-samsung" 
-        data-name="Galaxy S24 Ultra" data-price="$1050" 
-        data-cpu="SD 8 Gen 3 for Galaxy" data-os="One UI 6.1" 
-        data-ram="12GB" data-rom="256GB - 1TB" 
-        data-cam="200+50+12+10 Мп" data-batt="5000 мАч">
+    <div class="card" id="p3" data-name="Galaxy S24 Ultra" data-price="$1050" data-cpu="SD 8 Gen 3" data-os="One UI 6.1" data-ram="12GB" data-batt="5000 mAh">
         <div class="img-box"><img src="images/samsung.png"></div>
         <h3>Galaxy S24 Ultra</h3>
         <div class="price">$1050</div>
         <div class="btns-group">
-            <button class="btn btn-info" onclick="openInfo('phone-samsung')">ИНФО</button>
-            <button class="btn btn-comp" onclick="addToCompare(this, 'phone-samsung')">+ СРАВНИТЬ</button>
+            <button class="btn btn-info" onclick="openInfo('p3')">ИНФО</button>
+            <button class="btn btn-comp" onclick="addToCompare(this, 'p3')">+ СРАВНИТЬ</button>
         </div>
     </div>
 </div>
@@ -169,14 +161,20 @@
 <div class="modal" id="infoModal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h2 id="modalTitle" style="color: var(--accent); margin-bottom: 25px;"></h2>
-        <div id="modalBody"></div>
+        <h2 id="mTitle" style="color:var(--accent)"></h2>
+        <div id="mBody"></div>
     </div>
 </div>
 
 <div class="compare-bar" id="compBar">
-    <span id="compTxt" style="font-weight: bold;">Выбрано: 0</span>
-    <button onclick="alert('Открываю таблицу сравнения...')" style="padding: 10px 20px; border-radius: 12px; border: none; font-weight: 900; cursor: pointer;">СРАВНИТЬ</button>
+    <span id="compCount">Выбрано: 0</span>
+    <button onclick="showCompareTable()" style="padding: 8px 15px; border-radius: 10px; border:none; font-weight:bold;">СРАВНИТЬ</button>
+</div>
+
+<div id="compareScreen">
+    <span class="close" onclick="this.parentElement.style.display='none'">&times;</span>
+    <h2 align="center">Сравнение</h2>
+    <div id="tablePlace" style="overflow-x: auto;"></div>
 </div>
 
 <script>
@@ -184,15 +182,13 @@
 
     function openInfo(id) {
         const d = document.getElementById(id).dataset;
-        document.getElementById('modalTitle').innerText = d.name;
-        document.getElementById('modalBody').innerHTML = `
-            <div class="spec-row"><span class="label">Процессор</span><span class="val">${d.cpu}</span></div>
-            <div class="spec-row"><span class="label">Система</span><span class="val">${d.os}</span></div>
-            <div class="spec-row"><span class="label">RAM</span><span class="val">${d.ram}</span></div>
-            <div class="spec-row"><span class="label">Память</span><span class="val">${d.rom}</span></div>
-            <div class="spec-row"><span class="label">Камеры</span><span class="val">${d.cam}</span></div>
-            <div class="spec-row"><span class="label">Батарея</span><span class="val">${d.batt}</span></div>
-            <div class="spec-row" style="border:none; margin-top:10px;"><span class="label">Цена</span><span class="val" style="color:#22c55e">${d.price}</span></div>
+        document.getElementById('mTitle').innerText = d.name;
+        document.getElementById('mBody').innerHTML = `
+            <div class="spec-row"><span class="label">Процессор</span><span>${d.cpu}</span></div>
+            <div class="spec-row"><span class="label">Система</span><span>${d.os}</span></div>
+            <div class="spec-row"><span class="label">RAM</span><span>${d.ram}</span></div>
+            <div class="spec-row"><span class="label">Батарея</span><span>${d.batt}</span></div>
+            <div class="spec-row" style="border:none"><span class="label">Цена</span><span style="color:#22c55e">${d.price}</span></div>
         `;
         document.getElementById('infoModal').style.display = 'flex';
     }
@@ -212,13 +208,24 @@
                 btn.innerText = 'В СПИСКЕ';
             }
         }
-        const bar = document.getElementById('compBar');
-        document.getElementById('compTxt').innerText = `Выбрано: ${compareList.length}`;
-        bar.style.display = compareList.length > 0 ? 'flex' : 'none';
+        document.getElementById('compCount').innerText = `Выбрано: ${compareList.length}`;
+        document.getElementById('compBar').style.display = compareList.length > 0 ? 'flex' : 'none';
     }
 
-    window.onclick = (e) => { if(e.target == document.getElementById('infoModal')) closeModal(); }
+    function showCompareTable() {
+        let html = `<table><tr><th>Параметр</th>`;
+        compareList.forEach(id => html += `<th>${document.getElementById(id).dataset.name}</th>`);
+        html += `</tr>`;
+        const rows = [['Процессор','cpu'],['ОС','os'],['RAM','ram'],['АКБ','batt'],['Цена','price']];
+        rows.forEach(r => {
+            html += `<tr><td><b>${r[0]}</b></td>`;
+            compareList.forEach(id => html += `<td>${document.getElementById(id).dataset[r[1]]}</td>`);
+            html += `</tr>`;
+        });
+        html += `</table>`;
+        document.getElementById('tablePlace').innerHTML = html;
+        document.getElementById('compareScreen').style.display = 'block';
+    }
 </script>
-
 </body>
 </html>
