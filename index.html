@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhoneLayer | Сравнение</title>
+    <title>PhoneLayer | Сравнение Эксперт</title>
     <style>
         :root {
             --bg: #050810;
@@ -11,22 +11,25 @@
             --card-bg: rgba(255, 255, 255, 0.03);
             --text-secondary: #94a3b8;
             --success: #22c55e;
+            --gold: #fbbf24;
         }
 
         body { background-color: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
         header { padding: 40px 20px; text-align: center; width: 100%; }
-        h1 { font-size: 3rem; margin: 0; background: linear-gradient(to right, #60a5fa, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h1 { font-size: 3.5rem; margin: 0; background: linear-gradient(to right, #60a5fa, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; }
 
         .main-container { width: 95%; max-width: 1300px; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; padding: 20px; padding-bottom: 150px; }
         
-        .card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; padding: 20px; transition: 0.4s; position: relative; }
-        .card:hover { border-color: var(--accent); background: rgba(255, 255, 255, 0.06); }
+        .card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; padding: 25px; transition: 0.4s; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
         
-        .img-box { width: 100px; height: 100px; margin: 0 auto 15px; cursor: pointer; }
+        .img-box { width: 150px; height: 150px; margin-bottom: 20px; }
         .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
+        .price-main { font-size: 1.5rem; color: var(--success); font-weight: bold; margin: 10px 0; }
+        
         .compare-btn {
-            width: 100%; padding: 10px; border-radius: 12px; border: 1px solid var(--accent);
+            width: 100%; padding: 12px; border-radius: 15px; border: 1.5px solid var(--accent);
             background: transparent; color: var(--accent); cursor: pointer; transition: 0.3s; font-weight: bold;
         }
         .compare-btn.active { background: var(--accent); color: black; }
@@ -35,58 +38,96 @@
         .compare-bar {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 600px; background: #0ea5e9; color: white;
-            padding: 15px 25px; border-radius: 20px; display: flex; justify-content: space-between;
-            align-items: center; transition: 0.5s; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 15px 25px; border-radius: 25px; display: flex; justify-content: space-between;
+            align-items: center; transition: 0.5s; z-index: 2000; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
         }
         .compare-bar.show { bottom: 30px; }
-        .go-btn { background: white; color: #0ea5e9; border: none; padding: 8px 20px; border-radius: 10px; font-weight: 900; cursor: pointer; }
+        .go-btn { background: white; color: #0ea5e9; border: none; padding: 10px 25px; border-radius: 12px; font-weight: 900; cursor: pointer; }
 
-        /* ТАБЛИЦА СРАВНЕНИЯ */
-        .compare-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050810; z-index: 3000; overflow-y: auto; padding: 40px 20px; }
-        .compare-table { width: 100%; max-width: 1000px; margin: 0 auto; border-collapse: collapse; }
-        .compare-table th, .compare-table td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
-        .compare-table th { font-size: 1.2rem; color: var(--accent); }
-        .param-name { text-align: left !important; color: var(--text-secondary); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; }
-        .close-compare { position: fixed; top: 20px; right: 20px; font-size: 2rem; cursor: pointer; }
+        /* ОКНО СРАВНЕНИЯ */
+        .compare-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050810; z-index: 3000; overflow-y: auto; }
+        .modal-inner { max-width: 1200px; margin: 60px auto; padding: 20px; }
+        .close-compare { position: fixed; top: 20px; right: 30px; font-size: 3rem; cursor: pointer; color: white; z-index: 3001; }
+
+        .compare-table { width: 100%; border-collapse: collapse; margin-top: 30px; background: rgba(255,255,255,0.02); border-radius: 20px; overflow: hidden; }
+        .compare-table th, .compare-table td { padding: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; vertical-align: top; }
+        .compare-table th { background: rgba(56, 189, 248, 0.1); color: var(--accent); font-size: 1.4rem; }
+        .param-name { text-align: left !important; color: var(--text-secondary); font-weight: bold; text-transform: uppercase; font-size: 0.85rem; width: 200px; background: rgba(0,0,0,0.2); }
+        .val-text { font-size: 1rem; line-height: 1.5; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>PhoneLayer</h1>
-    <p style="color: var(--text-secondary)">Выберите устройства для сравнения</p>
+    <p style="color: var(--text-secondary)">Добавьте до 3-х устройств для детального сравнения</p>
 </header>
 
-<div class="main-container" id="phoneGrid">
-    <div class="card" data-id="1" data-name="iPhone 16 Pro Max" data-price="$1199" data-cpu="A18 Pro" data-screen="6.9'' OLED" data-batt="4685 мАч">
+<div class="main-container">
+    <div class="card" 
+        data-id="apple" 
+        data-name="iPhone 16 Pro Max" 
+        data-price="$1199" 
+        data-cpu="Apple A18 Pro (3nm)" 
+        data-os="iOS 18" 
+        data-screen="6.9'' LTPO OLED, 120Hz, 2000 nits" 
+        data-ram="8GB LPDDR5X"
+        data-rom="256GB / 512GB / 1TB (NVMe)"
+        data-cam="48MP + 48MP (UW) + 12MP (5x Zoom)" 
+        data-batt="4685 mAh, 30W Wired, MagSafe">
         <div class="img-box"><img src="images/iphone.png"></div>
-        <h3 align="center">iPhone 16 Pro Max</h3>
-        <button class="compare-btn" onclick="toggleCompare(this, '1')">+ Сравнить</button>
+        <h3>iPhone 16 Pro Max</h3>
+        <div class="price-main">$1199</div>
+        <button class="compare-btn" onclick="toggleCompare(this, 'apple')">+ Сравнить</button>
     </div>
 
-    <div class="card" data-id="2" data-name="Honor Magic V3" data-price="$1350" data-cpu="SD 8 Gen 3" data-screen="7.92'' Fold" data-batt="5150 мАч">
+    <div class="card" 
+        data-id="honor" 
+        data-name="Honor Magic V3" 
+        data-price="$1350" 
+        data-cpu="Snapdragon 8 Gen 3" 
+        data-os="MagicOS 8.0.1 (Android 14)" 
+        data-screen="7.92'' Foldable LTPO OLED" 
+        data-ram="12GB / 16GB"
+        data-rom="256GB / 512GB / 1TB (UFS 4.0)"
+        data-cam="50MP + 50MP (Tele) + 40MP (UW)" 
+        data-batt="5150 mAh, 66W Wired, 50W Wireless">
         <div class="img-box"><img src="images/honor.png"></div>
-        <h3 align="center">Honor Magic V3</h3>
-        <button class="compare-btn" onclick="toggleCompare(this, '2')">+ Сравнить</button>
+        <h3>Honor Magic V3</h3>
+        <div class="price-main">$1350</div>
+        <button class="compare-btn" onclick="toggleCompare(this, 'honor')">+ Сравнить</button>
     </div>
 
-    <div class="card" data-id="3" data-name="Galaxy S24 Ultra" data-price="$1050" data-cpu="SD 8 Gen 3" data-screen="6.8'' AMOLED" data-batt="5000 мАч">
+    <div class="card" 
+        data-id="samsung" 
+        data-name="Galaxy S24 Ultra" 
+        data-price="$1050" 
+        data-cpu="Snapdragon 8 Gen 3 for Galaxy" 
+        data-os="One UI 6.1 (Android 14)" 
+        data-screen="6.8'' Dynamic AMOLED 2X, 2600 nits" 
+        data-ram="12GB LPDDR5X"
+        data-rom="256GB / 512GB / 1TB (UFS 4.0)"
+        data-cam="200MP + 50MP + 10MP + 12MP" 
+        data-batt="5000 mAh, 45W Wired, 15W Wireless">
         <div class="img-box"><img src="images/samsung.png"></div>
-        <h3 align="center">Galaxy S24 Ultra</h3>
-        <button class="compare-btn" onclick="toggleCompare(this, '3')">+ Сравнить</button>
+        <h3>Galaxy S24 Ultra</h3>
+        <div class="price-main">$1050</div>
+        <button class="compare-btn" onclick="toggleCompare(this, 'samsung')">+ Сравнить</button>
     </div>
 </div>
 
 <div class="compare-bar" id="compareBar">
-    <span id="compareCount">Выбрано: 0</span>
-    <button class="go-btn" onclick="openCompare()">СРАВНИТЬ СЕЙЧАС</button>
+    <span id="compareCount" style="font-weight: bold; font-size: 1.1rem;">Выбрано: 0</span>
+    <button class="go-btn" onclick="openCompare()">СРАВНИТЬ ВСЁ</button>
 </div>
 
 <div class="compare-modal" id="compareModal">
     <span class="close-compare" onclick="closeCompare()">&times;</span>
-    <h2 align="center">Сравнение характеристик</h2>
-    <table class="compare-table" id="compareTable">
-        </table>
+    <div class="modal-inner">
+        <h2 align="center" style="font-size: 2.5rem; margin-bottom: 10px;">Техническое сравнение</h2>
+        <p align="center" style="color: var(--text-secondary); margin-bottom: 40px;">Прямое сопоставление всех характеристик</p>
+        <table class="compare-table" id="compareTable"></table>
+    </div>
 </div>
 
 <script>
@@ -99,7 +140,11 @@
             name: card.dataset.name,
             price: card.dataset.price,
             cpu: card.dataset.cpu,
+            os: card.dataset.os,
             screen: card.dataset.screen,
+            ram: card.dataset.ram,
+            rom: card.dataset.rom,
+            cam: card.dataset.cam,
             batt: card.dataset.batt
         };
 
@@ -112,35 +157,39 @@
             if (compareList.length < 3) {
                 compareList.push(phone);
                 btn.classList.add('active');
-                btn.innerText = 'В сравнении';
+                btn.innerText = 'В списке ✅';
             } else {
-                alert('Можно сравнить не более 3-х устройств!');
+                alert('Максимум 3 устройства!');
             }
         }
 
         const bar = document.getElementById('compareBar');
-        document.getElementById('compareCount').innerText = `Выбрано: ${compareList.length}`;
+        document.getElementById('compareCount').innerText = `Выбрано устройств: ${compareList.length}`;
         compareList.length > 0 ? bar.classList.add('show') : bar.classList.remove('show');
     }
 
     function openCompare() {
         const table = document.getElementById('compareTable');
-        let html = `<tr><th class="param-name">Параметр</th>`;
-        
+        let html = `<tr><th class="param-name">Характеристика</th>`;
         compareList.forEach(p => { html += `<th>${p.name}</th>`; });
         html += `</tr>`;
 
-        const params = [
-            ['Цена', 'price'],
+        // Массив всех параметров для вывода
+        const specs = [
+            ['Средняя цена', 'price'],
             ['Процессор', 'cpu'],
-            ['Экран', 'screen'],
-            ['Батарея', 'batt']
+            ['Система (OS)', 'os'],
+            ['Дисплей', 'screen'],
+            ['Опер. память (RAM)', 'ram'],
+            ['Накопитель (ROM)', 'rom'],
+            ['Камеры', 'cam'],
+            ['Аккумулятор', 'batt']
         ];
 
-        params.forEach(param => {
-            html += `<tr><td class="param-name">${param[0]}</td>`;
+        specs.forEach(s => {
+            html += `<tr><td class="param-name">${s[0]}</td>`;
             compareList.forEach(p => {
-                html += `<td>${p[param[1]]}</td>`;
+                html += `<td class="val-text">${p[s[1]]}</td>`;
             });
             html += `</tr>`;
         });
