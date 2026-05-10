@@ -3,215 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhoneLayer — Энциклопедия смартфонов</title>
+    <title>PhoneLayer | Разделы</title>
     <style>
         :root {
-            --bg-color: #030712; /* Глубокий черный */
-            --accent-apple: #007aff; 
-            --accent-honor: #a855f7; 
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text-primary: #f9fafb;
-            --text-secondary: #94a3b8;
+            --bg: #030712;
+            --apple: #007aff;
+            --honor: #a855f7;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-        }
-
-        /* Эффект свечения на фоне */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -10%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            height: 500px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.07) 0%, rgba(3, 7, 18, 0) 70%);
-            z-index: -1;
-            filter: blur(80px);
         }
 
         header {
             text-align: center;
-            margin: 60px 0;
+            padding: 60px 20px;
+            background: radial-gradient(circle at center, rgba(56, 189, 248, 0.1), transparent);
+            width: 100%;
         }
 
-        h1 {
-            font-size: clamp(3rem, 10vw, 4.5rem);
-            font-weight: 900;
-            margin: 0;
-            background: linear-gradient(135deg, #fff 0%, #38bdf8 50%, #a855f7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -2px;
-        }
+        h1 { font-size: 3.5rem; margin: 0; letter-spacing: -2px; }
 
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
+        /* МЕНЮ РАЗДЕЛОВ */
+        .brand-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 50px;
+            overflow-x: auto;
             width: 90%;
-            padding-bottom: 100px;
+            padding: 10px;
         }
 
-        /* КАРТОЧКА */
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 30px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Тень при наведении */
-        .apple-card:hover { box-shadow: 0 20px 40px rgba(0, 122, 255, 0.15); }
-        .honor-card:hover { box-shadow: 0 20px 40px rgba(168, 85, 247, 0.15); }
-
-        .brand-badge {
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-
-        .apple-card .brand-badge { background: rgba(0, 122, 255, 0.1); color: var(--accent-apple); }
-        .honor-card .brand-badge { background: rgba(168, 85, 247, 0.1); color: var(--accent-honor); }
-
-        h2 { font-size: 1.8rem; margin: 0 0 20px 0; }
-
-        /* ВИЗУАЛ ТЕЛЕФОНА */
-        .phone-visual {
-            width: 100%;
-            height: 250px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            overflow: hidden;
-            border-radius: 20px;
-        }
-
-        .phone-visual img {
-            max-width: 85%;
-            max-height: 85%;
-            object-fit: contain;
-            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        /* АНИМАЦИЯ: Увеличение при наведении или нажатии */
-        .card:hover .phone-visual img, 
-        .card:active .phone-visual img {
-            transform: scale(1.2);
-        }
-
-        .specs {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .specs li {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.95rem;
-        }
-
-        .specs li:last-child { border: none; }
-        .label { color: var(--text-secondary); }
-        .value { font-weight: 700; }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            margin-top: 25px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-weight: 600;
+        .nav-item {
+            padding: 10px 25px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            cursor: pointer;
+            white-space: nowrap;
             transition: 0.3s;
         }
 
-        .apple-card .btn:hover { background: var(--accent-apple); }
-        .honor-card .btn:hover { background: var(--accent-honor); }
+        .nav-item:hover { background: white; color: black; }
 
-        @media (max-width: 480px) {
-            h1 { font-size: 2.8rem; }
-            .container { grid-template-columns: 1fr; }
+        /* ГРУППИРОВКА ПО БРЕНДАМ */
+        .section-title {
+            width: 90%;
+            max-width: 1200px;
+            font-size: 2rem;
+            margin: 40px 0 20px;
+            padding-left: 15px;
+            border-left: 4px solid var(--apple);
         }
+
+        .honor-title { border-left-color: var(--honor); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 90%;
+            max-width: 1200px;
+            margin-bottom: 60px;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.4s;
+        }
+
+        .card:hover { transform: scale(1.03); border-color: rgba(255,255,255,0.3); }
+
+        .img-container {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .img-container img {
+            max-width: 80%;
+            max-height: 80%;
+            transition: 0.5s; /* Анимация увеличения */
+        }
+
+        /* Твоя фишка с увеличением фото */
+        .card:hover img { transform: scale(1.2); }
+
+        .specs-list {
+            text-align: left;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin: 15px 0;
+        }
+
+        .specs-list div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .specs-list span { color: white; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>PhoneLayer</h1>
-    <div class="subtitle">Future Mobile Database</div>
+    <p style="color: #64748b">Выберите категорию устройств</p>
 </header>
 
-<div class="container">
-    <div class="card apple-card">
-        <div class="brand-badge">Apple</div>
-        <h2>iPhone 16 Pro Max</h2>
-        <div class="phone-visual">
-            <img src="https://www.apple.com/v/iphone/home/bu/images/overview/select/iphone_15_pro__fba5ot8ayuey_large.png" alt="iPhone">
-        </div>
-        <ul class="specs">
-            <li><span class="label">Процессор</span> <span class="value">A18 Pro</span></li>
-            <li><span class="label">Дисплей</span> <span class="value">6.9" OLED 120Hz</span></li>
-            <li><span class="label">Камера</span> <span class="value">48 MP Ultra-Wide</span></li>
-            <li><span class="label">Вес</span> <span class="value">227 г</span></li>
-        </ul>
-        <a href="#" class="btn">Характеристики</a>
-    </div>
+<div class="brand-nav">
+    <div class="nav-item">Apple</div>
+    <div class="nav-item">Honor</div>
+    <div class="nav-item">Samsung</div>
+    <div class="nav-item">Xiaomi</div>
+</div>
 
-    <div class="card honor-card">
-        <div class="brand-badge">Honor</div>
-        <h2>Magic V3</h2>
-        <div class="phone-visual">
+<div class="section-title">Apple Devices</div>
+<div class="grid">
+    <div class="card">
+        <div class="img-container">
+            <img src="https://support.apple.com/library/APPLE/APPLECARE_ALLGEOS/SP893/iphone-15-pro-max-colors.png" alt="iPhone">
+        </div>
+        <h3>iPhone 16 Pro Max</h3>
+        <div class="specs-list">
+            <div>Процессор <span>A18 Pro</span></div>
+            <div>Экран <span>6.9" OLED</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="section-title honor-title">Honor Devices</div>
+<div class="grid">
+    <div class="card">
+        <div class="img-container">
             <img src="https://pms-global.pccw.com/m/resource/file/5b958e0a-5c3b-4176-88c9-0a67137b00ca/large/HONOR_Magic_V3_Orange_03.webp" alt="Honor">
         </div>
-        <ul class="specs">
-            <li><span class="label">Корпус</span> <span class="value">9.2 мм (Fold)</span></li>
-            <li><span class="label">Чипсет</span> <span class="value">Snapdragon 8 Gen 3</span></li>
-            <li><span class="label">Дисплей</span> <span class="value">7.92" LTPO</span></li>
-            <li><span class="label">Батарея</span> <span class="value">5150 мАч</span></li>
-        </ul>
-        <a href="#" class="btn">Характеристики</a>
+        <h3>Honor Magic V3</h3>
+        <div class="specs-list">
+            <div>Тип <span>Foldable</span></div>
+            <div>Толщина <span>9.2 мм</span></div>
+        </div>
     </div>
 </div>
 
