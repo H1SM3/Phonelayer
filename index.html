@@ -5,163 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PhoneLayer | Разделы</title>
     <style>
-        :root {
-            --bg: #030712;
-            --apple: #007aff;
-            --honor: #a855f7;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-        }
-
         body {
-            background-color: var(--bg);
+            background-color: #030712;
             color: white;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
-        header {
-            text-align: center;
-            padding: 60px 20px;
-            background: radial-gradient(circle at center, rgba(56, 189, 248, 0.1), transparent);
-            width: 100%;
-        }
-
-        h1 { font-size: 3.5rem; margin: 0; letter-spacing: -2px; }
-
-        /* МЕНЮ РАЗДЕЛОВ */
-        .brand-nav {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 50px;
-            overflow-x: auto;
-            width: 90%;
-            padding: 10px;
-        }
-
-        .nav-item {
-            padding: 10px 25px;
-            background: var(--glass);
-            border: 1px solid var(--border);
-            border-radius: 50px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: 0.3s;
-        }
-
-        .nav-item:hover { background: white; color: black; }
-
-        /* ГРУППИРОВКА ПО БРЕНДАМ */
-        .section-title {
-            width: 90%;
-            max-width: 1200px;
-            font-size: 2rem;
-            margin: 40px 0 20px;
-            padding-left: 15px;
-            border-left: 4px solid var(--apple);
-        }
-
-        .honor-title { border-left-color: var(--honor); }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            width: 90%;
-            max-width: 1200px;
-            margin-bottom: 60px;
-        }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 3rem; background: linear-gradient(to right, #38bdf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .brand-section { width: 100%; max-width: 800px; margin-bottom: 50px; }
+        .section-title { font-size: 1.5rem; border-left: 5px solid #007aff; padding-left: 15px; margin-bottom: 20px; }
+        .honor-title { border-color: #a855f7; }
 
         .card {
-            background: var(--glass);
-            border: 1px solid var(--border);
-            border-radius: 24px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
             padding: 20px;
-            text-align: center;
-            transition: 0.4s;
-        }
-
-        .card:hover { transform: scale(1.03); border-color: rgba(255,255,255,0.3); }
-
-        .img-container {
-            height: 200px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            margin-bottom: 15px;
+            gap: 20px;
+            transition: 0.3s;
         }
+        .card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.1); }
+        
+        .img-box { width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .img-box img { max-width: 100%; transition: 0.5s; }
+        .card:hover img { transform: scale(1.3); } /* Твоя анимка */
 
-        .img-container img {
-            max-width: 80%;
-            max-height: 80%;
-            transition: 0.5s; /* Анимация увеличения */
-        }
-
-        /* Твоя фишка с увеличением фото */
-        .card:hover img { transform: scale(1.2); }
-
-        .specs-list {
-            text-align: left;
-            font-size: 0.9rem;
-            color: #94a3b8;
-            margin: 15px 0;
-        }
-
-        .specs-list div {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .specs-list span { color: white; font-weight: bold; }
+        .info h3 { margin: 0 0 5px 0; }
+        .info p { margin: 0; color: #94a3b8; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>PhoneLayer</h1>
-    <p style="color: #64748b">Выберите категорию устройств</p>
+    <p>Энциклопедия по разделам</p>
 </header>
 
-<div class="brand-nav">
-    <div class="nav-item">Apple</div>
-    <div class="nav-item">Honor</div>
-    <div class="nav-item">Samsung</div>
-    <div class="nav-item">Xiaomi</div>
-</div>
-
-<div class="section-title">Apple Devices</div>
-<div class="grid">
+<div class="brand-section">
+    <div class="section-title">Apple</div>
     <div class="card">
-        <div class="img-container">
+        <div class="img-box">
             <img src="https://support.apple.com/library/APPLE/APPLECARE_ALLGEOS/SP893/iphone-15-pro-max-colors.png" alt="iPhone">
         </div>
-        <h3>iPhone 16 Pro Max</h3>
-        <div class="specs-list">
-            <div>Процессор <span>A18 Pro</span></div>
-            <div>Экран <span>6.9" OLED</span></div>
+        <div class="info">
+            <h3>iPhone 16 Pro Max</h3>
+            <p>Чип: A18 Pro | Экран: 6.9"</p>
         </div>
     </div>
 </div>
 
-<div class="section-title honor-title">Honor Devices</div>
-<div class="grid">
+<div class="brand-section">
+    <div class="section-title honor-title">Honor</div>
     <div class="card">
-        <div class="img-container">
+        <div class="img-box">
             <img src="https://pms-global.pccw.com/m/resource/file/5b958e0a-5c3b-4176-88c9-0a67137b00ca/large/HONOR_Magic_V3_Orange_03.webp" alt="Honor">
         </div>
-        <h3>Honor Magic V3</h3>
-        <div class="specs-list">
-            <div>Тип <span>Foldable</span></div>
-            <div>Толщина <span>9.2 мм</span></div>
+        <div class="info">
+            <h3>Magic V3</h3>
+            <p>Толщина: 9.2 мм | Складной</p>
         </div>
     </div>
 </div>
 
 </body>
 </html>
+ 
