@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhoneLayer | Premium Database</title>
+    <title>PhoneLayer | Interactive</title>
     <style>
         :root {
             --bg: #050810;
@@ -15,157 +15,165 @@
             background-color: var(--bg);
             color: white;
             font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column; align-items: center;
         }
 
         header {
             text-align: center;
-            padding: 60px 20px;
-            background: radial-gradient(circle at center, rgba(56, 189, 248, 0.1), transparent 80%);
+            padding: 40px 20px;
             width: 100%;
         }
 
         h1 { 
-            font-size: clamp(2.5rem, 8vw, 4rem); 
-            margin: 0; 
-            background: linear-gradient(to right, #60a5fa, #a855f7); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            font-weight: 900;
+            font-size: 3rem; margin: 0;
+            background: linear-gradient(to right, #60a5fa, #a855f7);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* ГРИД-СИСТЕМА (Ландшафтный вид) */
+        /* ПОИСК */
+        .search-container {
+            width: 90%; max-width: 600px; margin-bottom: 40px;
+        }
+
+        #phoneSearch {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        #phoneSearch:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); }
+
         .main-container {
-            width: 90%;
-            max-width: 1200px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            padding-bottom: 100px;
+            width: 90%; max-width: 1200px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px; padding-bottom: 100px;
         }
 
         .section-title {
-            grid-column: 1 / -1;
-            font-size: 1.8rem;
-            margin-top: 40px;
-            padding-left: 15px;
-            border-left: 4px solid var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            grid-column: 1 / -1; font-size: 1.5rem; margin-top: 30px;
+            padding-left: 15px; border-left: 4px solid var(--accent);
         }
 
         .card {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 28px;
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(10px);
+            border-radius: 28px; padding: 25px;
+            display: flex; align-items: center; gap: 20px;
+            transition: 0.4s; cursor: pointer;
         }
 
-        .card:hover {
-            transform: scale(1.03) translateY(-5px);
-            background: rgba(255, 255, 255, 0.06);
-            border-color: var(--accent);
-        }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
 
-        /* ТВОЯ АНИМАЦИЯ КАРТИНКИ */
-        .img-box {
-            width: 120px;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .img-box { width: 100px; height: 100px; }
+        .img-box img { max-width: 100%; max-height: 100%; object-fit: contain; transition: 0.5s; }
+        .card:hover img { transform: scale(1.2); }
 
-        .img-box img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            transition: 0.5s ease;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-        }
-
-        .card:hover img {
-            transform: scale(1.3) rotate(-5deg);
-        }
-
-        .info h3 { margin: 0 0 8px 0; font-size: 1.4rem; }
-        .info p { margin: 4px 0; color: #94a3b8; font-size: 0.9rem; }
-        
         .badge {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent);
+            display: inline-block; padding: 4px 10px; border-radius: 8px;
+            font-size: 0.7rem; background: rgba(56, 189, 248, 0.1); color: var(--accent);
         }
 
-        @media (max-width: 600px) {
-            .main-container { grid-template-columns: 1fr; }
-            .card { padding: 20px; }
+        /* МОДАЛЬНОЕ ОКНО */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            z-index: 1000; justify-content: center; align-items: center;
         }
+
+        .modal-content {
+            background: #0f172a; padding: 40px; border-radius: 30px;
+            max-width: 500px; width: 90%; border: 1px solid var(--accent);
+            text-align: center; position: relative;
+        }
+
+        .close-btn { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 1.5rem; }
+
+        @media (max-width: 600px) { .main-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <header>
     <h1>PhoneLayer</h1>
-    <p style="opacity: 0.5;">DATABASE OF THE FUTURE</p>
+    <div class="search-container">
+        <input type="text" id="phoneSearch" placeholder="Поиск по названию или бренду...">
+    </div>
 </header>
 
-<div class="main-container">
-    
-    <div class="section-title">Apple</div>
-    <div class="card">
-        <div class="img-box">
-            <img src="images/iphone.png" alt="iPhone 16">
-        </div>
+<div class="main-container" id="phoneGrid">
+    <div class="section-title brand-group" data-brand="apple">Apple</div>
+    <div class="card phone-card" data-name="iPhone 16 Pro Max" data-specs="Камера: 48+48+12 Мп, Батарея: 4685 мАч, Чип: A18 Pro">
+        <div class="img-box"><img src="images/iphone.png"></div>
         <div class="info">
             <h3>iPhone 16 Pro Max</h3>
-            <p>Чип: A18 Pro</p>
-            <p>Экран: 6.9" ProMotion</p>
             <div class="badge">iOS 18</div>
         </div>
     </div>
 
-    <div class="section-title" style="border-color: #a855f7;">Honor</div>
-    <div class="card">
-        <div class="img-box">
-            <img src="images/honor.png" alt="Honor Magic">
-        </div>
+    <div class="section-title brand-group" data-brand="honor" style="border-color: #a855f7;">Honor</div>
+    <div class="card phone-card" data-name="Honor Magic V3" data-specs="Толщина: 9.2 мм, Вес: 226г, Гибкий экран 7.92 дюйма">
+        <div class="img-box"><img src="images/honor.png"></div>
         <div class="info">
             <h3>Honor Magic V3</h3>
-            <p>Толщина: 9.2 мм</p>
-            <p>Тип: Складной</p>
-            <div class="badge" style="color: #a855f7; background: rgba(168, 85, 247, 0.1);">MagicOS</div>
+            <div class="badge" style="color:#a855f7">MagicOS</div>
         </div>
     </div>
 
-    <div class="section-title" style="border-color: #fbbf24;">Samsung</div>
-    <div class="card">
-        <div class="img-box">
-            <img src="images/samsung.png" alt="Samsung S24">
-        </div>
+    <div class="section-title brand-group" data-brand="samsung" style="border-color: #fbbf24;">Samsung</div>
+    <div class="card phone-card" data-name="Galaxy S24 Ultra" data-specs="Экран: 2600 нит, Стилус S-Pen, ИИ функции Galaxy AI">
+        <div class="img-box"><img src="images/samsung.png"></div>
         <div class="info">
             <h3>Galaxy S24 Ultra</h3>
-            <p>Камера: 200 Мп</p>
-            <p>Особенность: S-Pen</p>
-            <div class="badge" style="color: #fbbf24; background: rgba(251, 191, 36, 0.1);">Galaxy AI</div>
+            <div class="badge" style="color:#fbbf24">Galaxy AI</div>
         </div>
     </div>
-
 </div>
+
+<div class="modal" id="infoModal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalSpecs" style="color: #94a3b8; line-height: 1.6;"></p>
+        <button onclick="closeModal()" style="margin-top: 20px; padding: 10px 30px; border-radius: 10px; border: none; background: var(--accent); color: black; font-weight: bold; cursor: pointer;">Закрыть</button>
+    </div>
+</div>
+
+<script>
+    // ЛОГИКА ПОИСКА
+    const searchInput = document.getElementById('phoneSearch');
+    const cards = document.querySelectorAll('.phone-card');
+    
+    searchInput.addEventListener('input', () => {
+        const filter = searchInput.value.toLowerCase();
+        cards.forEach(card => {
+            const name = card.getAttribute('data-name').toLowerCase();
+            card.style.display = name.includes(filter) ? 'flex' : 'none';
+        });
+    });
+
+    // ЛОГИКА МОДАЛЬНОГО ОКНА
+    const modal = document.getElementById('infoModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalSpecs = document.getElementById('modalSpecs');
+
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            modalTitle.innerText = card.getAttribute('data-name');
+            modalSpecs.innerText = card.getAttribute('data-specs');
+            modal.style.display = 'flex';
+        });
+    });
+
+    function closeModal() { modal.style.display = 'none'; }
+    window.onclick = (event) => { if (event.target == modal) closeModal(); }
+</script>
 
 </body>
 </html>
